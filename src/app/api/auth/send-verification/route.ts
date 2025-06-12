@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { sendVerificationEmail } from "@/lib/email";
-import { setVerificationCode } from "@/lib/verification-store";
+import { setVerificationCode, getVerificationCode, deleteVerificationCode } from "@/lib/verification-store";
 
 function generateVerificationCode(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
@@ -52,7 +52,7 @@ export async function GET(request: Request) {
     );
   }
 
-  const storedData = verificationCodes.get(email);
+  const storedData = getVerificationCode(email);
   
   if (!storedData) {
     return NextResponse.json(
@@ -62,7 +62,7 @@ export async function GET(request: Request) {
   }
 
   if (new Date() > storedData.expires) {
-    verificationCodes.delete(email);
+    deleteVerificationCode(email);
     return NextResponse.json(
       { message: "Verification code has expired" },
       { status: 400 }
@@ -77,7 +77,7 @@ export async function GET(request: Request) {
   }
 
   // Code is valid - clean up and return success
-  verificationCodes.delete(email);
+  deleteVerificationCode(email);
   return NextResponse.json(
     { message: "Email verified successfully" },
     { status: 200 }
