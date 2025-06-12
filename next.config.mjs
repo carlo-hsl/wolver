@@ -9,8 +9,7 @@ const nextConfig = {
   },
   poweredByHeader: false,
   experimental: {
-    optimizeCss: true,
-    optimizePackageImports: ['react-icons']
+    optimizeCss: false
   }
 };
 
