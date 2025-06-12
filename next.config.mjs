@@ -5,8 +5,13 @@ const nextConfig = {
   output: 'standalone',
   images: {
     domains: [],
+    unoptimized: true
   },
-  poweredByHeader: false
+  poweredByHeader: false,
+  experimental: {
+    optimizeCss: true,
+    optimizePackageImports: ['react-icons']
+  }
 };
 
 export default nextConfig; 
