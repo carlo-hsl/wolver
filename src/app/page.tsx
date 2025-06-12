@@ -4,6 +4,9 @@ import { LoadingSequence } from '@/components/LoadingSequence';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
+export const dynamic = 'force-static';
+export const revalidate = false;
+
 export default function Home() {
   return (
     <main className="min-h-screen relative bg-[#1a1a1a]">

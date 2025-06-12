@@ -5,6 +5,11 @@ const nextConfig = {
   swcMinify: true,
   images: {
     unoptimized: true
+  },
+  trailingSlash: false,
+  distDir: '.next',
+  typescript: {
+    ignoreBuildErrors: false
   }
 };
 

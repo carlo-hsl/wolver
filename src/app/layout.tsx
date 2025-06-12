@@ -7,6 +7,15 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Wolver - Smart Loans",
   description: "Access flexible financing options with Wolver",
+  metadataBase: new URL('https://wolver.vercel.app'),
+  openGraph: {
+    title: 'Wolver - Smart Loans',
+    description: 'Access flexible financing options with Wolver',
+    url: 'https://wolver.vercel.app',
+    siteName: 'Wolver',
+    locale: 'en_US',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({
