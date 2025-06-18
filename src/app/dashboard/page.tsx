@@ -338,7 +338,15 @@ export default function Dashboard() {
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                     {/* Loan Calculator */}
                     <div className="lg:col-span-4">
-                      <LoanCalculator />
+                      <LoanCalculator 
+                        btcAmount={1} // Default value
+                        targetPrice={50000} // Default value
+                        tenor={12} // Default value
+                        onCalculationUpdate={(calc) => {
+                          // Handle calculation updates if needed
+                          console.log('Loan calculation updated:', calc);
+                        }}
+                      />
                     </div>
 
                     {/* BTC Price Chart */}
