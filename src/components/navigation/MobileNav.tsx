@@ -3,6 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+interface MobileNavProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
 const navigation = [
   {
     name: "Home",
@@ -107,34 +112,40 @@ const navigation = [
   },
 ];
 
-export default function MobileNav() {
-  const pathname = usePathname();
+export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
+  if (!isOpen) return null;
 
   return (
-    <nav className="lg:hidden fixed bottom-0 inset-x-0 bg-[#2b2b2b] border-t border-gray-800">
-      <div className="grid h-16 grid-cols-5">
-        {navigation.map((item) => {
-          const isActive = pathname === item.href;
-          return (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={`flex flex-col items-center justify-center space-y-1 ${
-                item.name === "Pay" ? "-mt-6" : ""
-              }`}
-            >
-              {item.icon(isActive)}
-              <span
-                className={`text-xs ${
-                  isActive ? "text-[#FC7E10]" : "text-gray-400"
-                }`}
-              >
-                {item.name}
-              </span>
-            </Link>
-          );
-        })}
+    <div className="fixed inset-0 z-40 lg:hidden">
+      <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={onClose} />
+      <div className="fixed inset-y-0 left-0 flex flex-col w-64 bg-white">
+        <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
+          <div className="flex-shrink-0 flex items-center px-4">
+            <span className="text-2xl font-bold text-[#FC7E10]">WOLVER</span>
+          </div>
+          <nav className="mt-5 px-2 space-y-1">
+            {navigation.map((item) => {
+              const isActive = usePathname() === item.href;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`group flex items-center px-2 py-2 text-base font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900`}
+                >
+                  {item.icon(isActive)}
+                  <span
+                    className={`text-xs ${
+                      isActive ? "text-[#FC7E10]" : "text-gray-400"
+                    }`}
+                  >
+                    {item.name}
+                  </span>
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
       </div>
-    </nav>
+    </div>
   );
 } 

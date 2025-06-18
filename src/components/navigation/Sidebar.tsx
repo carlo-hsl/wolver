@@ -31,7 +31,7 @@ const navigation: NavItem[] = [
   },
   {
     name: "My Loans",
-    href: "/loans",
+    href: "/dashboard/my-loans",
     icon: (active) => (
       <svg
         className={`w-6 h-6 ${active ? "text-[#FC7E10]" : "text-gray-400"}`}
@@ -50,7 +50,7 @@ const navigation: NavItem[] = [
   },
   {
     name: "Documents",
-    href: "/documents",
+    href: "/dashboard/documents",
     icon: (active) => (
       <svg
         className={`w-6 h-6 ${active ? "text-[#FC7E10]" : "text-gray-400"}`}
@@ -69,7 +69,7 @@ const navigation: NavItem[] = [
   },
   {
     name: "Payments",
-    href: "/payments",
+    href: "/dashboard/payments",
     icon: (active) => (
       <svg
         className={`w-6 h-6 ${active ? "text-[#FC7E10]" : "text-gray-400"}`}
@@ -88,7 +88,7 @@ const navigation: NavItem[] = [
   },
   {
     name: "Settings",
-    href: "/settings",
+    href: "/dashboard/settings",
     icon: (active) => (
       <svg
         className={`w-6 h-6 ${active ? "text-[#FC7E10]" : "text-gray-400"}`}

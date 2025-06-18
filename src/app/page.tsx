@@ -3,6 +3,7 @@
 import { FcGoogle } from 'react-icons/fc';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function Home() {
   const [email, setEmail] = useState('');
@@ -23,9 +24,16 @@ export default function Home() {
       <div className="w-full max-w-md p-8 space-y-8 bg-[#1E2026] rounded-2xl shadow-xl mx-4">
         {/* Logo and Title */}
         <div className="text-center space-y-3">
-          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-orange-300">
-            WOLVER
-          </h1>
+          <div className="flex justify-center">
+            <Image
+              src="/wolver-logo-white.png"
+              alt="Wolver"
+              width={160}
+              height={42}
+              className="h-auto w-40"
+              priority
+            />
+          </div>
           <p className="text-[22px] font-medium text-white">Welcome to Wolver</p>
           <p className="text-sm text-gray-400">Enter your email to get started</p>
         </div>

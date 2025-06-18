@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function CreatePassword() {
   const [email, setEmail] = useState('');
@@ -61,9 +62,16 @@ export default function CreatePassword() {
       <div className="w-full max-w-md p-8 space-y-8 bg-[#1E2026] rounded-2xl shadow-xl mx-4">
         {/* Logo and Title */}
         <div className="text-center space-y-3">
-          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-orange-300">
-            WOLVER
-          </h1>
+          <div className="flex justify-center">
+            <Image
+              src="/wolver-logo-white.png"
+              alt="Wolver"
+              width={160}
+              height={42}
+              className="h-auto w-40"
+              priority
+            />
+          </div>
           <p className="text-[22px] font-medium text-white">Create Password</p>
           <p className="text-sm text-gray-400">
             Create a strong password for<br />
@@ -83,7 +91,7 @@ export default function CreatePassword() {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 bg-[#2B2F36] border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-white"
+                className="w-full px-4 py-3 bg-[#2B2F36] border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-white placeholder-gray-500"
                 placeholder="Enter your password"
                 required
               />
@@ -97,7 +105,7 @@ export default function CreatePassword() {
                 id="confirmPassword"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full px-4 py-3 bg-[#2B2F36] border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-white"
+                className="w-full px-4 py-3 bg-[#2B2F36] border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-white placeholder-gray-500"
                 placeholder="Confirm your password"
                 required
               />
@@ -108,19 +116,19 @@ export default function CreatePassword() {
           <div className="space-y-2">
             <p className="text-sm font-medium text-gray-300">Password Requirements:</p>
             <ul className="space-y-1 text-sm">
-              <li className={`flex items-center gap-2 ${requirements.length ? 'text-green-500' : 'text-gray-400'}`}>
+              <li className={`flex items-center gap-2 ${requirements.length ? 'text-green-500' : 'text-gray-500'}`}>
                 {requirements.length ? '✓' : '○'} At least 8 characters
               </li>
-              <li className={`flex items-center gap-2 ${requirements.number ? 'text-green-500' : 'text-gray-400'}`}>
+              <li className={`flex items-center gap-2 ${requirements.number ? 'text-green-500' : 'text-gray-500'}`}>
                 {requirements.number ? '✓' : '○'} Contains a number
               </li>
-              <li className={`flex items-center gap-2 ${requirements.lowercase ? 'text-green-500' : 'text-gray-400'}`}>
+              <li className={`flex items-center gap-2 ${requirements.lowercase ? 'text-green-500' : 'text-gray-500'}`}>
                 {requirements.lowercase ? '✓' : '○'} Contains a lowercase letter
               </li>
-              <li className={`flex items-center gap-2 ${requirements.uppercase ? 'text-green-500' : 'text-gray-400'}`}>
+              <li className={`flex items-center gap-2 ${requirements.uppercase ? 'text-green-500' : 'text-gray-500'}`}>
                 {requirements.uppercase ? '✓' : '○'} Contains an uppercase letter
               </li>
-              <li className={`flex items-center gap-2 ${requirements.special ? 'text-green-500' : 'text-gray-400'}`}>
+              <li className={`flex items-center gap-2 ${requirements.special ? 'text-green-500' : 'text-gray-500'}`}>
                 {requirements.special ? '✓' : '○'} Contains a special character
               </li>
             </ul>
