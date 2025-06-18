@@ -1,139 +1,122 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface LoanCalculation {
+  loanAmount: number;
+  interestRate: number;
   monthlyPayment: number;
   totalPayment: number;
   totalInterest: number;
 }
 
-export default function LoanCalculator() {
-  const [loanAmount, setLoanAmount] = useState<number>(10000);
+interface LoanCalculatorProps {
+  btcAmount: number;
+  targetPrice: number;
+  tenor: number;
+  onCalculationUpdate: (calc: LoanCalculation) => void;
+}
+
+const LoanCalculator: React.FC<LoanCalculatorProps> = ({ btcAmount, targetPrice, tenor, onCalculationUpdate }) => {
+  const [loanAmount, setLoanAmount] = useState<number>(0);
   const [interestRate, setInterestRate] = useState<number>(5);
-  const [loanTerm, setLoanTerm] = useState<number>(12);
-  const [calculation, setCalculation] = useState<LoanCalculation | null>(null);
+  const [monthlyPayment, setMonthlyPayment] = useState<number>(0);
+  const [totalPayment, setTotalPayment] = useState<number>(0);
+  const [totalInterest, setTotalInterest] = useState<number>(0);
 
-  const calculateLoan = () => {
-    const monthlyRate = interestRate / 100 / 12;
-    const numberOfPayments = loanTerm;
-    
-    const monthlyPayment = 
-      (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) /
-      (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
-    
-    const totalPayment = monthlyPayment * numberOfPayments;
-    const totalInterest = totalPayment - loanAmount;
+  useEffect(() => {
+    // Calculate loan amount based on BTC amount and target price
+    const calculatedLoanAmount = btcAmount * targetPrice;
+    setLoanAmount(calculatedLoanAmount);
 
-    setCalculation({
-      monthlyPayment,
-      totalPayment,
-      totalInterest,
+    // Calculate monthly payment using the formula: P * (r * (1 + r)^n) / ((1 + r)^n - 1)
+    const r = interestRate / 100 / 12; // monthly interest rate
+    const n = tenor * 12; // number of payments
+    const monthly = calculatedLoanAmount * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+    setMonthlyPayment(monthly);
+
+    // Calculate total payment and total interest
+    const total = monthly * n;
+    setTotalPayment(total);
+    setTotalInterest(total - calculatedLoanAmount);
+
+    // Update parent component with calculation results
+    onCalculationUpdate({
+      loanAmount: calculatedLoanAmount,
+      interestRate,
+      monthlyPayment: monthly,
+      totalPayment: total,
+      totalInterest: total - calculatedLoanAmount,
     });
-  };
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(amount);
-  };
+  }, [btcAmount, targetPrice, tenor, interestRate, onCalculationUpdate]);
 
   return (
-    <div className="bg-[#2b2b2b] rounded-lg shadow-sm p-8">
-      <h3 className="text-lg font-semibold text-white mb-6">Loan Calculator</h3>
-      
-      <div className="space-y-6">
+    <div className="bg-[#2b2b2b] rounded-lg shadow-sm p-6">
+      <h3 className="text-lg font-medium text-white mb-4">Loan Calculator</h3>
+      <div className="space-y-4">
         <div>
-          <label htmlFor="loanAmount" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="loanAmount" className="block text-sm font-medium text-gray-300 mb-1">
             Loan Amount
           </label>
-          <div className="relative rounded-md shadow-sm">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <span className="text-gray-400 sm:text-sm">$</span>
-            </div>
-            <input
-              type="number"
-              name="loanAmount"
-              id="loanAmount"
-              value={loanAmount}
-              onChange={(e) => setLoanAmount(Number(e.target.value))}
-              className="block w-full pl-8 pr-4 py-4 text-center text-lg font-medium bg-[#1E2026] border border-gray-700 rounded-md focus:ring-[#FC7E10] focus:border-[#FC7E10] text-white"
-              placeholder="0.00"
-            />
-          </div>
+          <input
+            type="number"
+            id="loanAmount"
+            value={loanAmount.toFixed(2)}
+            readOnly
+            className="w-full px-4 py-3 bg-[#1E2026] border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FC7E10] text-white"
+          />
         </div>
-
         <div>
-          <label htmlFor="interestRate" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="interestRate" className="block text-sm font-medium text-gray-300 mb-1">
             Interest Rate (%)
           </label>
-          <div className="relative rounded-md shadow-sm">
-            <input
-              type="number"
-              name="interestRate"
-              id="interestRate"
-              value={interestRate}
-              onChange={(e) => setInterestRate(Number(e.target.value))}
-              className="block w-full px-6 py-4 text-center text-lg font-medium bg-[#1E2026] border border-gray-700 rounded-md focus:ring-[#FC7E10] focus:border-[#FC7E10] text-white"
-              placeholder="0.00"
-            />
-            <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-              <span className="text-gray-400 sm:text-sm">%</span>
-            </div>
-          </div>
+          <input
+            type="number"
+            id="interestRate"
+            value={interestRate}
+            onChange={(e) => setInterestRate(Number(e.target.value))}
+            className="w-full px-4 py-3 bg-[#1E2026] border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FC7E10] text-white"
+          />
         </div>
-
         <div>
-          <label htmlFor="loanTerm" className="block text-sm font-medium text-gray-300 mb-2">
-            Loan Term (months)
+          <label htmlFor="monthlyPayment" className="block text-sm font-medium text-gray-300 mb-1">
+            Monthly Payment
           </label>
-          <div className="relative rounded-md shadow-sm">
-            <input
-              type="number"
-              name="loanTerm"
-              id="loanTerm"
-              value={loanTerm}
-              onChange={(e) => setLoanTerm(Number(e.target.value))}
-              className="block w-full px-6 py-4 text-center text-lg font-medium bg-[#1E2026] border border-gray-700 rounded-md focus:ring-[#FC7E10] focus:border-[#FC7E10] text-white"
-              placeholder="12"
-            />
-            <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-              <span className="text-gray-400 sm:text-sm">months</span>
-            </div>
-          </div>
+          <input
+            type="number"
+            id="monthlyPayment"
+            value={monthlyPayment.toFixed(2)}
+            readOnly
+            className="w-full px-4 py-3 bg-[#1E2026] border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FC7E10] text-white"
+          />
         </div>
-
-        <button
-          onClick={calculateLoan}
-          className="w-full py-4 px-4 bg-[#FC7E10] text-white rounded-md hover:bg-[#e67300] transition-colors duration-200 font-medium text-lg"
-        >
-          Calculate
-        </button>
-
-        {calculation && (
-          <div className="mt-8 space-y-4 bg-[#1E2026] p-6 rounded-lg">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-400">Monthly Payment</span>
-              <span className="text-lg font-semibold text-white">
-                {formatCurrency(calculation.monthlyPayment)}
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-400">Total Payment</span>
-              <span className="text-lg font-semibold text-white">
-                {formatCurrency(calculation.totalPayment)}
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-400">Total Interest</span>
-              <span className="text-lg font-semibold text-white">
-                {formatCurrency(calculation.totalInterest)}
-              </span>
-            </div>
-          </div>
-        )}
+        <div>
+          <label htmlFor="totalPayment" className="block text-sm font-medium text-gray-300 mb-1">
+            Total Payment
+          </label>
+          <input
+            type="number"
+            id="totalPayment"
+            value={totalPayment.toFixed(2)}
+            readOnly
+            className="w-full px-4 py-3 bg-[#1E2026] border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FC7E10] text-white"
+          />
+        </div>
+        <div>
+          <label htmlFor="totalInterest" className="block text-sm font-medium text-gray-300 mb-1">
+            Total Interest
+          </label>
+          <input
+            type="number"
+            id="totalInterest"
+            value={totalInterest.toFixed(2)}
+            readOnly
+            className="w-full px-4 py-3 bg-[#1E2026] border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FC7E10] text-white"
+          />
+        </div>
       </div>
     </div>
   );
-} 
+};
+
+export default LoanCalculator; 
