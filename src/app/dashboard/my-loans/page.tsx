@@ -68,8 +68,9 @@ export default function MyLoans() {
 
   return (
     <div className="min-h-screen bg-[#1a1a1a]">
-      <Navbar />
+      <Navbar onMenuClick={() => setIsMobileMenuOpen(true)} />
       <Sidebar />
+      <MobileNav isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
       
       <div className="lg:pl-64 pb-16 lg:pb-0">
         <main className="py-8 px-4 sm:px-6 lg:px-8">
@@ -217,8 +218,6 @@ export default function MyLoans() {
           </div>
         </main>
       </div>
-
-      <MobileNav />
     </div>
   );
 } 

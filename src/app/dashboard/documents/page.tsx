@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import Navbar from "@/components/navigation/Navbar";
-import Sidebar from "@/components/navigation/Sidebar";
-import MobileNav from "@/components/navigation/MobileNav";
+import Navbar from '@/components/navigation/Navbar';
+import Sidebar from '@/components/navigation/Sidebar';
+import MobileNav from '@/components/navigation/MobileNav';
 
 interface Document {
   id: string;
@@ -22,7 +22,7 @@ const dummyDocuments: Document[] = [
     type: 'loan_agreement',
     date: new Date('2024-01-01'),
     size: '2.4 MB',
-    status: 'available'
+    status: 'available',
   },
   {
     id: 'DOC-002',
@@ -30,7 +30,7 @@ const dummyDocuments: Document[] = [
     type: 'statement',
     date: new Date('2024-02-01'),
     size: '1.2 MB',
-    status: 'available'
+    status: 'available',
   },
   {
     id: 'DOC-003',
@@ -38,15 +38,15 @@ const dummyDocuments: Document[] = [
     type: 'tax_form',
     date: new Date('2024-01-31'),
     size: '0.8 MB',
-    status: 'available'
-  }
+    status: 'available',
+  },
 ];
 
 function formatDate(date: Date): string {
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
   }).format(date);
 }
 
@@ -60,8 +60,9 @@ export default function Documents() {
 
   return (
     <div className="min-h-screen bg-[#1a1a1a]">
-      <Navbar />
+      <Navbar onMenuClick={() => setIsMobileMenuOpen(true)} />
       <Sidebar />
+      <MobileNav isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
       
       <div className="lg:pl-64 pb-16 lg:pb-0">
         <main className="py-8 px-4 sm:px-6 lg:px-8">
@@ -233,8 +234,6 @@ export default function Documents() {
           </div>
         </main>
       </div>
-
-      <MobileNav />
     </div>
   );
 } 
