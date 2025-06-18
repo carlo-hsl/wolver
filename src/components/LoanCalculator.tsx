@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react';
 
 interface LoanCalculation {
+  totalValue: number;
+  downPayment: number;
   loanAmount: number;
   interestRate: number;
   monthlyPayment: number;
@@ -25,8 +27,10 @@ const LoanCalculator: React.FC<LoanCalculatorProps> = ({ btcAmount, targetPrice,
   const [totalInterest, setTotalInterest] = useState<number>(0);
 
   useEffect(() => {
-    // Calculate loan amount based on BTC amount and target price
-    const calculatedLoanAmount = btcAmount * targetPrice;
+    // Calculate total value and loan amount based on BTC amount and target price
+    const totalValue = btcAmount * targetPrice;
+    const downPayment = totalValue * 0.2; // 20% down payment
+    const calculatedLoanAmount = totalValue - downPayment;
     setLoanAmount(calculatedLoanAmount);
 
     // Calculate monthly payment using the formula: P * (r * (1 + r)^n) / ((1 + r)^n - 1)
@@ -42,6 +46,8 @@ const LoanCalculator: React.FC<LoanCalculatorProps> = ({ btcAmount, targetPrice,
 
     // Update parent component with calculation results
     onCalculationUpdate({
+      totalValue,
+      downPayment,
       loanAmount: calculatedLoanAmount,
       interestRate,
       monthlyPayment: monthly,
